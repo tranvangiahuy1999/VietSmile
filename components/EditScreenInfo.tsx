@@ -19,17 +19,28 @@ export default function EditScreenInfo({ path }: { path: string }) {
 
   const [page, setPage] = useState(DEFAULT);
 
+  const backHandler = () => {
+    if(page !== DEFAULT){
+      setPage(DEFAULT);
+      return true;
+    } else {
+      BackHandler.exitApp();
+      return true
+    }
+  }
+
   useEffect(()=>{
     BackHandler.addEventListener(
       'hardwareBackPress',
-      function(){
-        if(page !== DEFAULT){
-          setPage(DEFAULT);
-          return true;
-        }
-      }
+      backHandler
       );
-  },[]);
+      return() => {
+        BackHandler.removeEventListener(
+          "hardwareBackPress",
+          backHandler
+        );
+      };
+  },[backHandler]);
 
   const onClick = (route) =>{
     setPage(route);
